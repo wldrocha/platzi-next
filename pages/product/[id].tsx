@@ -1,14 +1,23 @@
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 const ProductItem = () => {
+  const [product, setProduct] = useState<TProduct>()
+  const {
+    query: { id },
+  } = useRouter()
 
-    const router = useRouter()
-    
-    return (
-        <div>
-            <h1>Estas en el producto {router.query.id}</h1>
-        </div>
-    )
+  useEffect(async () => {
+    const response = await window.fetch(`/api/avo/${id}`)
+    const product = await response.json()
+    setProduct(product)
+  }, [])
+
+  return (
+    <div>
+      <h1>{product?.name}</h1>
+    </div>
+  )
 }
 
 export default ProductItem
